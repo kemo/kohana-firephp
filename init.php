@@ -1,7 +1,11 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
 // Disable in CLI
-if (Kohana::$is_cli)
+if (PHP_SAPI === 'cli')
+	return;
+
+// Disable in production
+if (Kohana::$environment === Kohana::PRODUCTION)
 	return;
 
 // Find and include the vendor
@@ -13,9 +17,3 @@ $fire_logger = new Fire_Log(array(
 
 // Attach a Fire_Log writer to Kohana
 Kohana::$log->attach($fire_logger);
-
-// Disable FirePHP logging in production phase
-if (Kohana::$environment === Kohana::PRODUCTION)
-{
-	$fire_logger->writer()->setEnabled(FALSE);
-}
